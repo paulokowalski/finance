@@ -1,0 +1,12 @@
+server:
+    servlet:
+        context-path: /finance
+
+spring:
+    jpa:
+        database: POSTGRESQL
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        username: postgres
+        password: postgres
+        url: jdbc:postgresql://192.168.68.140:5432/finance
