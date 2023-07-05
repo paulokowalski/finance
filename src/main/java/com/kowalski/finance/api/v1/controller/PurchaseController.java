@@ -1,6 +1,6 @@
 package com.kowalski.finance.api.v1.controller;
 
-import com.kowalski.finance.api.v1.model.PurchaseModel;
+import com.kowalski.finance.api.v1.input.PurchaseInput;
 import com.kowalski.finance.api.v1.response.PurchaseResponse;
 import com.kowalski.finance.domain.model.Purchase;
 import com.kowalski.finance.domain.service.PurchaseService;
@@ -28,7 +28,7 @@ public class PurchaseController {
     }
 
     @PostMapping
-    public Purchase save(@RequestBody PurchaseModel purchaseModel) {
-        return purchaseService.save(purchaseModel);
+    public Purchase save(@RequestBody PurchaseInput purchaseInput) {
+        return purchaseService.save(purchaseInput);
     }
 }

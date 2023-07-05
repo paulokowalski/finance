@@ -1,0 +1,47 @@
+package com.kowalski.finance.domain.service;
+
+import com.kowalski.finance.api.v1.input.ExpenseInput;
+import com.kowalski.finance.domain.model.Expense;
+import com.kowalski.finance.domain.model.InstallmentExpense;
+import com.kowalski.finance.domain.repository.ExpenseRepository;
+import com.kowalski.finance.domain.repository.InstallmentExpenseRespository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+
+@Service
+@RequiredArgsConstructor
+public class ExpenseService {
+
+    private final ExpenseRepository expenseRepository;
+
+    private final InstallmentExpenseRespository installmentExpenseRespository;
+
+    @Transactional
+    public Expense save(ExpenseInput expenseInput) {
+        var expense = expenseRepository.save(Expense.builder()
+                .nameProduct(expenseInput.nameProduct())
+                .typeProduct(expenseInput.typeProduct())
+                .valueProduct(expenseInput.valueProduct())
+                .dateExpense(expenseInput.dateExpense())
+                .numberInstallment(expenseInput.numberInstallment())
+                .build());
+
+        LocalDate dtInstallment = expense.getDateExpense();
+        for(int x = 0; x < expenseInput.numberInstallment(); x++){
+            var big = BigDecimal.valueOf(expenseInput.numberInstallment());
+
+            installmentExpenseRespository.save(InstallmentExpense.builder()
+                    .expense(expense)
+                    .dateInstallment(dtInstallment.plusMonths(x+1))
+                    .numberInstallment(x+1)
+                    .valueInstallment(expenseInput.valueProduct().divide(big, 2, RoundingMode.CEILING))
+                    .build());
+        }
+        return expense;
+    }
+}

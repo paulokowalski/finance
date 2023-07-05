@@ -1,6 +1,6 @@
 package com.kowalski.finance.domain.service;
 
-import com.kowalski.finance.api.v1.model.PurchaseModel;
+import com.kowalski.finance.api.v1.input.PurchaseInput;
 import com.kowalski.finance.api.v1.response.PurchaseResponse;
 import com.kowalski.finance.domain.model.InstallmentPurchase;
 import com.kowalski.finance.domain.model.Purchase;
@@ -32,25 +32,25 @@ public class PurchaseService {
     }
 
     @Transactional
-    public Purchase save(PurchaseModel purchaseModel) {
+    public Purchase save(PurchaseInput purchaseInput) {
         var purchase =  purchaseRepository.save(Purchase.builder()
-                .nameProduct(purchaseModel.nameProduct())
-                .nameCard(purchaseModel.nameCard())
-                .valueProduct(purchaseModel.valueProduct())
-                .namePersonPurchase(purchaseModel.namePersonPurchase())
-                .datePurchase(purchaseModel.datePurchase())
-                .numberInstallment(purchaseModel.numberInstallment())
+                .nameProduct(purchaseInput.nameProduct())
+                .nameCard(purchaseInput.nameCard())
+                .valueProduct(purchaseInput.valueProduct())
+                .namePersonPurchase(purchaseInput.namePersonPurchase())
+                .datePurchase(purchaseInput.datePurchase())
+                .numberInstallment(purchaseInput.numberInstallment())
                 .build());
 
         LocalDate dtInstallment = purchase.getDatePurchase();
-        for(int x = 0; x < purchaseModel.numberInstallment(); x++){
-            var big = BigDecimal.valueOf(purchaseModel.numberInstallment());
+        for(int x = 0; x < purchaseInput.numberInstallment(); x++){
+            var big = BigDecimal.valueOf(purchaseInput.numberInstallment());
 
             installmentPurchaseRespository.save(InstallmentPurchase.builder()
                     .purchase(purchase)
                     .dateInstallment(dtInstallment.plusMonths(x+1))
                     .numberInstallment(x+1)
-                    .valueInstallment(purchaseModel.valueProduct().divide(big, 2, RoundingMode.CEILING))
+                    .valueInstallment(purchaseInput.valueProduct().divide(big, 2, RoundingMode.CEILING))
                     .build());
         }
         return purchase;
