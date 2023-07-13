@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter @Setter
 public class ExpenseResponse {
 
+    public UUID uuid;
     public String nameProduct;
     public String typeProduct;
     public BigDecimal valueProduct;
@@ -17,6 +19,7 @@ public class ExpenseResponse {
 
     public static ExpenseResponse to(InstallmentExpense installmentExpense) {
         var response = new ExpenseResponse();
+        response.setUuid(installmentExpense.getUuid());
         response.setNameProduct(installmentExpense.getExpense().getNameProduct());
         response.setTypeProduct(installmentExpense.getExpense().getTypeProduct());
         response.setValueProduct(installmentExpense.getValueInstallment());
