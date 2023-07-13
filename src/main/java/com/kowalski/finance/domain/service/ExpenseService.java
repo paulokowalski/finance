@@ -1,6 +1,7 @@
 package com.kowalski.finance.domain.service;
 
 import com.kowalski.finance.api.v1.input.ExpenseInput;
+import com.kowalski.finance.api.v1.response.ExpenseResponse;
 import com.kowalski.finance.domain.model.Expense;
 import com.kowalski.finance.domain.model.InstallmentExpense;
 import com.kowalski.finance.domain.repository.ExpenseRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +45,9 @@ public class ExpenseService {
                     .build());
         }
         return expense;
+    }
+
+    public List<ExpenseResponse> findExpenseByDateNow() {
+        return installmentExpenseRespository.findExpenseByDateNow(LocalDate.now()).stream().map(ExpenseResponse::to).toList();
     }
 }
