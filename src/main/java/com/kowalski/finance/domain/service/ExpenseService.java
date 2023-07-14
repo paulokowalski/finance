@@ -6,14 +6,15 @@ import com.kowalski.finance.domain.model.Expense;
 import com.kowalski.finance.domain.model.InstallmentExpense;
 import com.kowalski.finance.domain.repository.ExpenseRepository;
 import com.kowalski.finance.domain.repository.InstallmentExpenseRespository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +50,15 @@ public class ExpenseService {
 
     public List<ExpenseResponse> findExpenseByDateNow() {
         return installmentExpenseRespository.findExpenseByDateNow(LocalDate.now()).stream().map(ExpenseResponse::to).toList();
+    }
+
+    @Transactional
+    public void updateMessageId(UUID uuid, Integer messageId){
+        installmentExpenseRespository.updateMessageId(uuid, messageId);
+    }
+
+    @Transactional
+    public void updateInstallmentExpense(Integer messageId) {
+        installmentExpenseRespository.updateInstallmentExpense(true, messageId);
     }
 }

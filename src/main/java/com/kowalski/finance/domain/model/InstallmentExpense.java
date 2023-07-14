@@ -34,13 +34,20 @@ public class InstallmentExpense {
     @Column(name = "dt_installment")
     private LocalDate dateInstallment;
 
+    @Column(name = "installment_paid")
+    private boolean installmentPaid;
+
+    private Integer messageId;
+
     public InstallmentExpense() {}
 
-    public InstallmentExpense(UUID uuid, Expense expense, Integer numberInstallment, BigDecimal valueInstallment, LocalDate dateInstallment) {
+    public InstallmentExpense(UUID uuid, Expense expense, Integer numberInstallment, BigDecimal valueInstallment, LocalDate dateInstallment, boolean installmentPaid, Integer messageId) {
         this.uuid = uuid;
         this.expense = expense;
         this.numberInstallment = numberInstallment;
         this.valueInstallment = valueInstallment;
         this.dateInstallment = dateInstallment;
+        this.installmentPaid = installmentPaid;
+        this.messageId = messageId;
     }
 }
