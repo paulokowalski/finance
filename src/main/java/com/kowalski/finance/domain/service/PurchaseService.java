@@ -48,7 +48,7 @@ public class PurchaseService {
 
             installmentPurchaseRespository.save(InstallmentPurchase.builder()
                     .purchase(purchase)
-                    .dateInstallment(dtInstallment.plusMonths(x+1))
+                    .dateInstallment(dtInstallment.plusMonths(x+1L))
                     .numberInstallment(x+1)
                     .valueInstallment(purchaseInput.valueProduct().divide(big, 2, RoundingMode.CEILING))
                     .build());

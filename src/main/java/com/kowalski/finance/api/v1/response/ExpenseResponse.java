@@ -10,12 +10,12 @@ import java.util.UUID;
 @Getter @Setter
 public class ExpenseResponse {
 
-    public UUID uuid;
-    public String nameProduct;
-    public String typeProduct;
-    public BigDecimal valueProduct;
-    public int installment;
-    public int totalInstallment;
+    private UUID uuid;
+    private String nameProduct;
+    private String typeProduct;
+    private BigDecimal valueProduct;
+    private int installment;
+    private int totalInstallment;
 
     public static ExpenseResponse to(InstallmentExpense installmentExpense) {
         var response = new ExpenseResponse();

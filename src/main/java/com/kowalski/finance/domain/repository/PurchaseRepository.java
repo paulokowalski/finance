@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
+public interface PurchaseRepository extends JpaRepository<Purchase, UUID> {
 
 
     @Query(value = " SELECT p.nm_person_purchase as nomePessoa, sum(ip.vl_installment) as valor, date_part('month', ip.dt_installment) as mes " +

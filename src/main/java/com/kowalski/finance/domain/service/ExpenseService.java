@@ -40,7 +40,7 @@ public class ExpenseService {
 
             installmentExpenseRespository.save(InstallmentExpense.builder()
                     .expense(expense)
-                    .dateInstallment(dtInstallment.plusMonths(x+1))
+                    .dateInstallment(dtInstallment.plusMonths(x+1L))
                     .numberInstallment(x+1)
                     .valueInstallment(expenseInput.valueProduct().divide(big, 2, RoundingMode.CEILING))
                     .build());
