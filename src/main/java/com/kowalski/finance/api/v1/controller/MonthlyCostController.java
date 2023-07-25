@@ -1,6 +1,8 @@
 package com.kowalski.finance.api.v1.controller;
 
+import com.kowalski.finance.api.v1.input.CostInput;
 import com.kowalski.finance.api.v1.response.CostResponse;
+import com.kowalski.finance.domain.model.MonthlyCost;
 import com.kowalski.finance.domain.service.MonthlyCostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -16,6 +18,11 @@ import java.util.UUID;
 public class MonthlyCostController {
 
     private final MonthlyCostService monthlyCostService;
+
+    @PostMapping
+    public MonthlyCost save(@RequestBody CostInput costInput) {
+        return monthlyCostService.save(costInput);
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CostResponse>> findCostByDateNow(){
