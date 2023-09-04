@@ -12,29 +12,26 @@ import java.util.UUID;
 @Getter @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Purchase {
+public class Despesa {
 
     @Id
-    @Column(name = "purchase_id")
+    @Column(name = "despesa_id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @Column(name = "nm_product")
+    @Column(name = "nm_despesa")
     private String nameProduct;
 
-    @Column(name = "vl_product")
+    @Column(name = "tp_despesa")
+    private String typeProduct;
+
+    @Column(name = "vl_despesa")
     private BigDecimal valueProduct;
 
-    @Column(name = "dt_purchase")
-    private LocalDate datePurchase;
+    @Column(name = "dt_despesa")
+    private LocalDate dateExpense;
 
-    @Column(name = "nr_installment")
+    @Column(name = "nr_parcelas_despesa")
     private Integer numberInstallment;
-
-    @Column(name = "nm_person_purchase")
-    private String namePersonPurchase;
-
-    @Column(name = "nm_card")
-    private String nameCard;
 
 }
