@@ -31,7 +31,7 @@ public class FiltroController {
     }
 
     @GetMapping("/pessoas/{ano}/{mes}")
-    public ResponseEntity<List<FiltroResponse>> buscarMeses(@PathVariable String ano, @PathVariable String mes){
+    public ResponseEntity<List<FiltroResponse>> buscarPessoas(@PathVariable String ano, @PathVariable String mes){
         return ResponseEntity.of(Optional.ofNullable(filtroService.buscarPessoas(ano, mes)));
     }
 }
