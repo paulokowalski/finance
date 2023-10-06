@@ -22,9 +22,9 @@ public class CompraController {
         return compraService.buscarTodos();
     }
 
-    @GetMapping("/{mes}/{pessoa}")
-    public CompraResponse buscarPorMesENome(@PathVariable String mes, @PathVariable String pessoa){
-        return compraService.buscarPorMesENome(mes, pessoa);
+    @GetMapping("/{ano}/{mes}/{pessoa}")
+    public CompraResponse buscarPorMesENome(@PathVariable String ano, @PathVariable String mes, @PathVariable String pessoa){
+        return compraService.buscarPorMesENome(ano, mes, pessoa);
     }
 
     @PostMapping

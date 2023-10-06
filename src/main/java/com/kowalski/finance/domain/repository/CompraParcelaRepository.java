@@ -12,11 +12,11 @@ import java.util.UUID;
 public interface CompraParcelaRepository extends JpaRepository<CompraParcela, UUID> {
 
     @Query( " SELECT cp FROM CompraParcela cp " +
-            " WHERE date_part('month', cp.dataParcela) = :mes " +
-            " AND   date_part('year', cp.dataParcela) = 2023 " +
+            " WHERE cast(date_part('month', cp.dataParcela) as text) = :mes " +
+            " AND   cast(date_part('year', cp.dataParcela) as text) = :ano " +
             " AND upper(cp.compra.nomePessoaCompra) = upper(:pessoa) " +
             " ORDER BY cp.compra.dataCompra DESC "
     )
-    List<CompraParcela> buscarPorMesENome(Double mes, String pessoa);
+    List<CompraParcela> buscarPorMesENome(String ano, String mes, String pessoa);
 
 }

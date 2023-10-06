@@ -28,8 +28,8 @@ public class CompraService {
         return compraRepository.findAll();
     }
 
-    public CompraResponse buscarPorMesENome(String mes, String pessoa) {
-        var lista = compraParcelaRepository.buscarPorMesENome(Double.valueOf(mes), pessoa);
+    public CompraResponse buscarPorMesENome(String ano, String mes, String pessoa) {
+        var lista = compraParcelaRepository.buscarPorMesENome(ano, mes, pessoa);
         var valorTotal = lista.stream().mapToDouble(cp -> cp.getValorParcela().doubleValue()).sum();
         var valorProximoMes = calcularValorProximoMes(lista);
         var listaCompras = lista.stream().map(cp ->
