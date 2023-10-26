@@ -1,6 +1,7 @@
 package com.kowalski.finance.domain.service;
 
 import com.kowalski.finance.api.v1.input.CompraInput;
+import com.kowalski.finance.api.v1.response.CompraCartaoResponse;
 import com.kowalski.finance.api.v1.response.CompraParcelaResponse;
 import com.kowalski.finance.api.v1.response.CompraResponse;
 import com.kowalski.finance.domain.model.Compra;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +32,27 @@ public class CompraService {
     }
 
     public CompraResponse buscarPorMesENome(String ano, String mes, String pessoa) {
-        var lista = compraParcelaRepository.buscarPorMesENome(ano, mes, pessoa);
-        var valorTotal = lista.stream().mapToDouble(cp -> cp.getValorParcela().doubleValue()).sum();
+        var lista = compraParcelaRepository.buscarPorMesENomeEPessoa(ano, mes, pessoa);
+        var listaCartao = compraParcelaRepository.buscarPorMesENome(ano, mes);
+        var valorTotal = somatorioDasParcelas(lista);
         var valorProximoMes = calcularValorProximoMes(lista);
-        var listaCompras = lista.stream().map(cp ->
+        return new CompraResponse(valorTotal, valorProximoMes, getCompraCartao(listaCartao), getCompraParcela(lista));
+    }
+
+    private List<CompraCartaoResponse> getCompraCartao(List<CompraParcela> lista) {
+        List<CompraCartaoResponse> response = new ArrayList<>();
+        lista.stream()
+                .collect(Collectors.groupingBy(parcela -> parcela.getCompra().getNomeCartao()))
+                .forEach((cartao, parcelas) -> response.add(new CompraCartaoResponse(cartao, somatorioDasParcelas(parcelas))) );
+        return response;
+    }
+
+    private static double somatorioDasParcelas(List<CompraParcela> parcelas) {
+        return parcelas.stream().mapToDouble(parcela -> parcela.getValorParcela().doubleValue()).sum();
+    }
+
+    private List<CompraParcelaResponse> getCompraParcela(List<CompraParcela> lista) {
+        return lista.stream().map(cp ->
                 new CompraParcelaResponse(
                         cp.getCompra().getNomeProduto().toUpperCase(),
                         cp.getValorParcela().doubleValue(),
@@ -45,7 +65,6 @@ public class CompraService {
                         cp.getCompra().getNomePessoaCompra().toUpperCase(),
                         cp.getCompra().getValorProduto().doubleValue()))
                 .toList();
-        return new CompraResponse(valorTotal, valorProximoMes, listaCompras);
     }
 
     private String ultimaParcela(CompraParcela cp){
@@ -67,11 +86,11 @@ public class CompraService {
     @Transactional
     public Compra salvar(CompraInput compraInput) {
         var purchase =  compraRepository.save(Compra.builder()
-                .nomeProduto(compraInput.nomeProduto())
-                .nomeCartao(compraInput.nomeCartao())
+                .nomeProduto(compraInput.nomeProduto().toUpperCase())
+                .nomeCartao(compraInput.nomeCartao().toUpperCase())
                 .valorProduto(compraInput.valorProduto())
-                .nomePessoaCompra(compraInput.nomePessoaCompra())
-                .dataCompra(compraInput.dataCompra())
+                .nomePessoaCompra(compraInput.nomePessoaCompra().toUpperCase())
+                .dataCompra(compraInput.dataCompra().plusDays(1))
                 .numeroParcelas(compraInput.numeroParcelas())
                 .build());
 

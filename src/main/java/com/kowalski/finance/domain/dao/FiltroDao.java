@@ -18,11 +18,8 @@ public class FiltroDao {
     private EntityManager entityManager;
 
     public List<FiltroResponse> buscarAnos(){
-        String sql = " select distinct cast(tb01.ano as text), cast(tb01.ano as text) from (select distinct DATE_PART('YEAR', dt_parcela) ano from compra_parcela cp " +
-//                     " union all " +
-//                     " select distinct DATE_PART('YEAR', dt_custo) ano from custo_mensal cm " +
-//                     " union all " +
-//                     " select distinct DATE_PART('YEAR', dt_despesa) ano from despesa_parcela dp " +
+        String sql = " select distinct cast(tb01.ano as text), cast(tb01.ano as text) from ( " +
+                     " select distinct DATE_PART('YEAR', dt_parcela) ano from compra_parcela cp " +
                      " ) tb01 order by cast(tb01.ano as text) desc ";
         Query query = entityManager.createNativeQuery(sql);
         List<Object[]> rows = query.getResultList();
@@ -36,10 +33,6 @@ public class FiltroDao {
     public List<FiltroResponse> buscarMeses(String ano){
         String sql = " select distinct cast(tb01.mes as text), cast(tb01.mes as text) from (" +
                      " select distinct DATE_PART('MONTH', dt_parcela) mes from compra_parcela cp where cast(DATE_PART('YEAR', dt_parcela) as text) = :ano " +
-//                     " union all " +
-//                     " select distinct DATE_PART('MONTH', dt_custo) mes from custo_mensal cm where cast(DATE_PART('YEAR', dt_custo) as text) = :ano " +
-//                     " union all " +
-//                     " select distinct DATE_PART('MONTH', dt_despesa) mes from despesa_parcela dp where cast(DATE_PART('YEAR', dt_despesa) as text) = :ano " +
                      " ) tb01 order by cast(tb01.mes as text) asc ";
         Query query = entityManager.createNativeQuery(sql);
         query.setParameter("ano", ano);
@@ -53,7 +46,7 @@ public class FiltroDao {
 
     public List<FiltroResponse> buscarPessoas(String ano, String mes){
         String sql = " select distinct c.nm_pessoa_compra, c.nm_pessoa_compra from compra c " +
-                     " join compra_parcela cp on cp.compra_id = c.compra_id " +
+                     " join compra_parcela cp on cp.compra_id = c.id " +
                      " where cast(DATE_PART('YEAR', dt_parcela) as text) = :ano " +
                      "   and cast(DATE_PART('MONTH', dt_parcela) as text) = :mes ";
         Query query = entityManager.createNativeQuery(sql);

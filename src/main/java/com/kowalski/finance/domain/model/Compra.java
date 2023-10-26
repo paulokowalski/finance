@@ -5,19 +5,18 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Builder
 @Getter @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@SequenceGenerator(name = "sequencecompra", sequenceName = "compra_id_seq", allocationSize = 1)
 public class Compra {
 
     @Id
-    @Column(name = "compra_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "sequencecompra")
+    private Long id;
 
     @Column(name = "nm_produto")
     private String nomeProduto;

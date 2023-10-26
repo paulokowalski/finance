@@ -7,19 +7,18 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Builder
 @Getter
 @Setter
 @Table(name = "compra_parcela")
+@SequenceGenerator(name = "sequencecompraparcela", sequenceName = "compra_parcela_id_seq", allocationSize = 1)
 public class CompraParcela {
 
     @Id
-    @Column(name = "compra_parcela_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "sequencecompraparcela")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "compra_id")
@@ -35,8 +34,8 @@ public class CompraParcela {
     private LocalDate dataParcela;
 
     public CompraParcela() {}
-    public CompraParcela(UUID uuid, Compra compra, Integer numeroParcela, BigDecimal valorParcela, LocalDate dataParcela) {
-        this.uuid = uuid;
+    public CompraParcela(Long id, Compra compra, Integer numeroParcela, BigDecimal valorParcela, LocalDate dataParcela) {
+        this.id = id;
         this.compra = compra;
         this.numeroParcela = numeroParcela;
         this.valorParcela = valorParcela;

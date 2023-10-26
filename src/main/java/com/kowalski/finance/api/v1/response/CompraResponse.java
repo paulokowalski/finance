@@ -8,6 +8,7 @@ public record CompraResponse (
 
         Double valorProximoMes,
 
+        List<CompraCartaoResponse> comprasCartao,
         List<CompraParcelaResponse> compras
 
 ) { }

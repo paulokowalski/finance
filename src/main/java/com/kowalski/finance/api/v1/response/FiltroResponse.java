@@ -11,7 +11,7 @@ public class FiltroResponse {
     String descricao;
 
     public FiltroResponse(String codigo, String descricao) {
-        this.codigo = codigo;
+        this.codigo = codigo.toUpperCase();
         this.descricao = descricao.toUpperCase();
     }
 }

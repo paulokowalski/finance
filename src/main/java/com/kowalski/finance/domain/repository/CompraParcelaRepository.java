@@ -17,6 +17,14 @@ public interface CompraParcelaRepository extends JpaRepository<CompraParcela, UU
             " AND upper(cp.compra.nomePessoaCompra) = upper(:pessoa) " +
             " ORDER BY cp.compra.dataCompra DESC "
     )
-    List<CompraParcela> buscarPorMesENome(String ano, String mes, String pessoa);
+    List<CompraParcela> buscarPorMesENomeEPessoa(String ano, String mes, String pessoa);
+
+    @Query( " SELECT cp FROM CompraParcela cp " +
+            " WHERE cast(date_part('month', cp.dataParcela) as text) = :mes " +
+            " AND   cast(date_part('year', cp.dataParcela) as text) = :ano " +
+            " ORDER BY cp.compra.dataCompra DESC "
+    )
+    List<CompraParcela> buscarPorMesENome(String ano, String mes);
+
 
 }
