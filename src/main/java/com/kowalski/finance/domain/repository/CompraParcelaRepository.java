@@ -12,12 +12,21 @@ import java.util.UUID;
 public interface CompraParcelaRepository extends JpaRepository<CompraParcela, UUID> {
 
     @Query( " SELECT cp FROM CompraParcela cp " +
-            " WHERE cast(date_part('month', cp.dataParcela) as text) = :mes " +
-            " AND   cast(date_part('year', cp.dataParcela) as text) = :ano " +
+            " WHERE cast(date_part('month', cp.dataParcela) as text) = remove_zeros_esquerda(:mes) " +
+            " AND   cast(date_part('year', cp.dataParcela) as text) = remove_zeros_esquerda(:ano) " +
             " AND upper(cp.compra.nomePessoaCompra) = upper(:pessoa) " +
             " ORDER BY cp.compra.dataCompra DESC "
     )
     List<CompraParcela> buscarPorMesENomeEPessoa(String ano, String mes, String pessoa);
+
+    @Query( " SELECT cp FROM CompraParcela cp " +
+            " WHERE cast(date_part('month', cp.dataParcela) as text) = remove_zeros_esquerda(:mes) " +
+            " AND   cast(date_part('year', cp.dataParcela) as text) = remove_zeros_esquerda(:ano) " +
+            " AND upper(cp.compra.nomePessoaCompra) = upper(:pessoa) " +
+            " AND upper(cp.compra.nomeCartao) = upper(:cartao) " +
+            " ORDER BY cp.compra.dataCompra DESC "
+    )
+    List<CompraParcela> buscarPorMesENomeEPessoaCartao(String ano, String mes, String pessoa, String cartao);
 
     @Query( " SELECT cp FROM CompraParcela cp " +
             " WHERE cast(date_part('month', cp.dataParcela) as text) = :mes " +
@@ -25,6 +34,5 @@ public interface CompraParcelaRepository extends JpaRepository<CompraParcela, UU
             " ORDER BY cp.compra.dataCompra DESC "
     )
     List<CompraParcela> buscarPorMesENome(String ano, String mes);
-
 
 }
