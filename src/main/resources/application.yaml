@@ -11,7 +11,5 @@ spring:
         username: postgres
         password: postgres
         url: jdbc:postgresql://192.168.68.116:5432/casa
-
-
-kafka:
-    bootstrap-servers: 192.168.68.116:9092
+    kafka:
+        bootstrap-servers: 192.168.68.116:9092
