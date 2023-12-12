@@ -1,5 +1,6 @@
 package com.kowalski.finance.config.kafka;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Configuration
 public class KafkaProducerConfig {
 
@@ -22,6 +24,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, Serializable> jsonProducerFactory() {
+        log.info(bootStrapServers);
         Map<String, Object> configs = new HashMap<>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
