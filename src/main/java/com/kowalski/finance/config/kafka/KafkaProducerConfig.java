@@ -16,7 +16,7 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
-    private String bootStrapServers = "localhost:9092";
+    private String bootStrapServers = "192.168.68.116:9092";
 
     @Bean
     public ProducerFactory<String, Serializable> jsonProducerFactory() {

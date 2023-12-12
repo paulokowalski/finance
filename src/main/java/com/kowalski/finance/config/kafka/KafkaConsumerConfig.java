@@ -19,7 +19,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    private String bootStrapServers = "localhost:9092";
+    private String bootStrapServers = "192.168.68.116:9092";
 
     @Bean
     public ConsumerFactory<String, CompraRealizadaEvent> compraRealizadaEventConsumerFactory() {
