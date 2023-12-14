@@ -2,51 +2,51 @@ version: '3.4'
 
 services:
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.1
-    hostname: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZK_SERVER_HEAP: 128
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-
-  kafka:
-    # See https://rmoff.net/2018/08/02/kafka-listeners-explained/ for details
-    image: confluentinc/cp-kafka:7.3.1
-    hostname: kafka
-    ports:
-      - "29092:29092"
-      - "9092:9092"
-    depends_on:
-      zookeeper:
-        condition: service_started
-    healthcheck:
-      test: nc -z 192.168.68.116 9092 || exit -1
-      start_period: 15s
-      interval: 1s
-      timeout: 10s
-      retries: 30
-    environment:
-      KAFKA_HEAP_OPTS: "-Xms1g -Xmx1g"
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://192.168.68.116:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
-#  kafdrop:
-#    image: obsidiandynamics/kafdrop:3.31.0
-#    restart: "no"
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:7.3.1
+#    hostname: zookeeper
 #    ports:
-#      - "9093:9000"
-#    depends_on:
-#      kafka:
-#        condition: service_healthy
-#    links:
-#      - kafka
+#      - "2181:2181"
 #    environment:
-#      KAFKA_BROKERCONNECT: "kafka:29092"
-#      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+#      ZK_SERVER_HEAP: 128
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#
+#  kafka:
+#    # See https://rmoff.net/2018/08/02/kafka-listeners-explained/ for details
+#    image: confluentinc/cp-kafka:7.3.1
+#    hostname: kafka
+#    ports:
+#      - "29092:29092"
+#      - "9092:9092"
+#    depends_on:
+#      zookeeper:
+#        condition: service_started
+#    healthcheck:
+#      test: nc -z 192.168.68.116 9092 || exit -1
+#      start_period: 15s
+#      interval: 1s
+#      timeout: 10s
+#      retries: 30
+#    environment:
+#      KAFKA_HEAP_OPTS: "-Xms1g -Xmx1g"
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://192.168.68.116:9092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:3.31.0
+    restart: "no"
+    ports:
+      - "9093:9000"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    links:
+      - kafka
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
