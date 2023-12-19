@@ -41,4 +41,8 @@ public class CompraParcela {
         this.valorParcela = valorParcela;
         this.dataParcela = dataParcela;
     }
+
+    public boolean isUltimaParcela() {
+        return this.getCompra().getNumeroParcelas().equals(this.getNumeroParcela());
+    }
 }

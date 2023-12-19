@@ -1,8 +1,6 @@
 package com.kowalski.finance.domain.service;
 
 import com.kowalski.finance.api.v1.input.CompraInput;
-import com.kowalski.finance.api.v1.response.CompraCartaoResponse;
-import com.kowalski.finance.api.v1.response.CompraParcelaResponse;
 import com.kowalski.finance.api.v1.response.CompraResponse;
 import com.kowalski.finance.config.kafka.event.CompraRealizadaEvent;
 import com.kowalski.finance.domain.model.Compra;
@@ -18,9 +16,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,56 +32,9 @@ public class CompraService {
         return compraRepository.findAll();
     }
 
-    public CompraResponse buscarPorMesENome(String ano, String mes, String pessoa) {
+    public CompraResponse buscarPorMesENome(String ano, String mes, String pessoa, String ultimaParcelaSelecionado) {
         var lista = compraParcelaRepository.buscarPorMesENomeEPessoa(ano, mes, pessoa);
-        var listaCartao = compraParcelaRepository.buscarPorMesENome(ano, mes);
-        var valorTotal = somatorioDasParcelas(lista);
-        var valorProximoMes = calcularValorProximoMes(lista);
-        return new CompraResponse(valorTotal, valorProximoMes, getCompraCartao(listaCartao), getCompraParcela(lista));
-    }
-
-    private List<CompraCartaoResponse> getCompraCartao(List<CompraParcela> lista) {
-        List<CompraCartaoResponse> response = new ArrayList<>();
-        lista.stream()
-                .collect(Collectors.groupingBy(parcela -> parcela.getCompra().getNomeCartao()))
-                .forEach((cartao, parcelas) -> response.add(new CompraCartaoResponse(cartao, somatorioDasParcelas(parcelas))) );
-        return response;
-    }
-
-    private static double somatorioDasParcelas(List<CompraParcela> parcelas) {
-        return parcelas.stream().mapToDouble(parcela -> parcela.getValorParcela().doubleValue()).sum();
-    }
-
-    private List<CompraParcelaResponse> getCompraParcela(List<CompraParcela> lista) {
-        return lista.stream().map(cp ->
-                new CompraParcelaResponse(
-                        cp.getCompra().getNomeProduto().toUpperCase(),
-                        cp.getValorParcela().doubleValue(),
-                        cp.getDataParcela(),
-                        cp.getCompra().getNumeroParcelas(),
-                        cp.getNumeroParcela(),
-                        ultimaParcela(cp),
-                        cp.getCompra().getNomeCartao().toUpperCase(),
-                        calculaValorFalta(cp),
-                        cp.getCompra().getNomePessoaCompra().toUpperCase(),
-                        cp.getCompra().getValorProduto().doubleValue()))
-                .toList();
-    }
-
-    private String ultimaParcela(CompraParcela cp){
-        return cp.getCompra().getNumeroParcelas().equals(cp.getNumeroParcela()) ? "Sim" : "Não";
-    }
-
-    private Double calculaValorFalta(CompraParcela cp) {
-        if(cp.getCompra().getNumeroParcelas().equals(cp.getNumeroParcela())) return Double.valueOf("0");
-        var numeroParcelas = cp.getCompra().getNumeroParcelas() - cp.getNumeroParcela();
-        return cp.getValorParcela().doubleValue() * numeroParcelas;
-    }
-
-    private Double calcularValorProximoMes(List<CompraParcela> compras) {
-        return compras.stream()
-                .filter(cp -> cp.getCompra().getNumeroParcelas() - cp.getNumeroParcela() > 0)
-                .mapToDouble(cp -> cp.getValorParcela().doubleValue()).sum();
+        return new CompraResponse(null).to(lista, ultimaParcelaSelecionado);
     }
 
     @Transactional

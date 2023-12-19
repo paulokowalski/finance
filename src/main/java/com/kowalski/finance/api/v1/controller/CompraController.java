@@ -6,6 +6,7 @@ import com.kowalski.finance.domain.model.Compra;
 import com.kowalski.finance.domain.service.CompraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +23,13 @@ public class CompraController {
         return compraService.buscarTodos();
     }
 
-    @GetMapping("/{ano}/{mes}/{pessoa}")
-    public CompraResponse buscarPorMesENome(@PathVariable String ano, @PathVariable String mes, @PathVariable String pessoa){
-        return compraService.buscarPorMesENome(ano, mes, pessoa);
+    @GetMapping("/{ano}/{mes}/{pessoa}/{ultimaParcelaSelecionado}")
+    public CompraResponse buscarPorMesENome(@PathVariable String ano, @PathVariable String mes, @PathVariable String pessoa, @PathVariable String ultimaParcelaSelecionado){
+        return compraService.buscarPorMesENome(ano, mes, pessoa, ultimaParcelaSelecionado);
     }
 
     @PostMapping
-    public Compra salvar(@RequestBody CompraInput compraInput) {
+    public Compra salvar(@Validated @RequestBody CompraInput compraInput) {
         return compraService.salvar(compraInput);
     }
 }
