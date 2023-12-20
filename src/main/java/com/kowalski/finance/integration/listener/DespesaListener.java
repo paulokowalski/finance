@@ -56,7 +56,7 @@ public class DespesaListener {
     private BigDecimal getValorTotalAnoMesPessoaCartao(String nomePessoa, String cartao, String mesAnoReferencia) {
         var mes = mesAnoReferencia.split("/")[0];
         var ano = mesAnoReferencia.split("/")[1];
-        var compras = compraParcelaRepository.buscarPorMesENomeEPessoaCartao(ano, mes, nomePessoa, cartao);
+        var compras = compraParcelaRepository.buscarPorMesENomeEPessoaCartao(ano, mes, nomePessoa, "%c6%");
         return BigDecimal.valueOf(compras.stream().mapToDouble(compra -> compra.getValorParcela().doubleValue()).sum());
     }
 }

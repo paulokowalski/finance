@@ -15,7 +15,7 @@ public interface CompraParcelaRepository extends JpaRepository<CompraParcela, UU
             " WHERE cast(date_part('month', cp.dataParcela) as text) = remove_zeros_esquerda(:mes) " +
             " AND   cast(date_part('year', cp.dataParcela) as text) = remove_zeros_esquerda(:ano) " +
             " AND upper(cp.compra.nomePessoaCompra) = upper(:pessoa) " +
-            " ORDER BY cp.compra.dataCompra DESC "
+            " ORDER BY cp.compra.dataCadastro DESC "
     )
     List<CompraParcela> buscarPorMesENomeEPessoa(String ano, String mes, String pessoa);
 
@@ -23,16 +23,9 @@ public interface CompraParcelaRepository extends JpaRepository<CompraParcela, UU
             " WHERE cast(date_part('month', cp.dataParcela) as text) = remove_zeros_esquerda(:mes) " +
             " AND   cast(date_part('year', cp.dataParcela) as text) = remove_zeros_esquerda(:ano) " +
             " AND upper(cp.compra.nomePessoaCompra) = upper(:pessoa) " +
-            " AND upper(cp.compra.nomeCartao) = upper(:cartao) " +
-            " ORDER BY cp.compra.dataCompra DESC "
+            " AND upper(cp.compra.nomeCartao) like upper(:cartao) " +
+            " ORDER BY cp.compra.dataCadastro DESC "
     )
     List<CompraParcela> buscarPorMesENomeEPessoaCartao(String ano, String mes, String pessoa, String cartao);
-
-    @Query( " SELECT cp FROM CompraParcela cp " +
-            " WHERE cast(date_part('month', cp.dataParcela) as text) = :mes " +
-            " AND   cast(date_part('year', cp.dataParcela) as text) = :ano " +
-            " ORDER BY cp.compra.dataCompra DESC "
-    )
-    List<CompraParcela> buscarPorMesENome(String ano, String mes);
 
 }

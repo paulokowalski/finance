@@ -1,24 +1,24 @@
 package com.kowalski.finance.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Builder
 @Getter
 @Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name = "compra_parcela")
-@SequenceGenerator(name = "sequencecompraparcela", sequenceName = "compra_parcela_id_seq", allocationSize = 1)
 public class CompraParcela {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "sequencecompraparcela")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "compra_id")
@@ -32,15 +32,6 @@ public class CompraParcela {
 
     @Column(name = "dt_parcela")
     private LocalDate dataParcela;
-
-    public CompraParcela() {}
-    public CompraParcela(Long id, Compra compra, Integer numeroParcela, BigDecimal valorParcela, LocalDate dataParcela) {
-        this.id = id;
-        this.compra = compra;
-        this.numeroParcela = numeroParcela;
-        this.valorParcela = valorParcela;
-        this.dataParcela = dataParcela;
-    }
 
     public boolean isUltimaParcela() {
         return this.getCompra().getNumeroParcelas().equals(this.getNumeroParcela());

@@ -16,7 +16,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +54,7 @@ public class CompraService {
                 .nomePessoaCompra(compraInput.nomePessoaCompra().toUpperCase())
                 .dataCompra(compraInput.dataCompra())
                 .numeroParcelas(compraInput.numeroParcelas())
+                .dataCadastro(LocalDateTime.now())
                 .build();
         compraRepository.save(compra);
         return compra;
@@ -62,6 +65,7 @@ public class CompraService {
         for(int x = 0; x < compraInput.numeroParcelas(); x++){
             var big = BigDecimal.valueOf(compraInput.numeroParcelas());
             var compraParcela = CompraParcela.builder()
+                    .id(UUID.randomUUID())
                     .compra(compra)
                     .dataParcela(dtInstallment.plusMonths(x+1L))
                     .numeroParcela(x+1)
